@@ -31,19 +31,22 @@ class KalmanFilter():
 
         self.m = 3
         self.n = 6
-
+        
+        # Observation covariance
         self.R = np.eye(self.m)
+        
+        # Propagation covariance
         self.Q = np.eye(self.n)
 
         self.P = np.eye(self.n)
         self.P_prior = np.empty((self.n, self.n))
 
         self.x = np.concatenate([x, np.zeros(3)])    # Assume 0 initial velocity
-        self.u = u
         self.x_prior = np.empty_like(self.x)
+        
+        self.u = u
 
     def forecast(self):
-        # 
         self.x_prior = self.A @ self.x + self.B @ self.u
         self.P_prior = self.A @ self.P @ np.transpose(self.A) + self.Q
         return self.x[0:3]
